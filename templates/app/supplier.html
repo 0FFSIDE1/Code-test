@@ -1,0 +1,191 @@
+{% extends "app/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+<body class="bg-theme bg-theme1">
+
+<!-- start loader -->
+   <div id="pageloader-overlay" class="visible incoming"><div class="loader-wrapper-outer"><div class="loader-wrapper-inner" ><div class="loader"></div></div></div></div>
+   <!-- end loader -->
+
+<!-- Start wrapper-->
+
+<div class="clearfix"></div>
+	
+  <div class="content-wrapper">
+    <div class="container-fluid">
+
+      {% block content %}
+      <div class="modal fade" id="Modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content  bg-theme3">
+            <div class="modal-header">
+              <h5 class="modal-title text-dark" id="exampleModalLabel">Delete</h5>
+              
+            </div>
+            <div class="modal-body text-dark">
+              
+                DO YOU WANT TO DELETE PARCEL?
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" onclick=closeBtn() class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+              
+              <button value="" id="deleteBtn" type="button" class="btn btn-danger deleteSuppliers ">Delete</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content  bg-primary bg-gradient">
+      <div class="modal-header">
+        <h5 class="modal-title text-black" id="exampleModalLabel">Update</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="{% url "update-supplier" %}" id="myForm" >
+
+          {% csrf_token %}
+
+    
+            
+          <div class="form-group">
+            <input name="id" type="text" id="myId" style="width:10px; height:2px;border:none;outline:none;" class="bg-primary bg-radiant text-primary">
+            <label for="recipient-name" class="col-form-label text-black">Name</label>
+            <input type="text" class="form-control" name="name" id="name" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label text-black">Mobile No:</label>
+            <input type="text" class="form-control" name="telephone" id="mobile_no" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label text-black">Email</label>
+            <input type="text" class="form-control" name="email"  id="email" required>
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label text-black">Address</label>
+            <input type="address" class="form-control" id="address" name="address" required>
+          </div>
+          
+         
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </div>
+      </div>
+        </form>
+      </div>
+      
+</div>
+{% if messages %}
+{% for message in messages %}
+<div id ="popupDiv" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+     <div class="alert-icon">
+    <i class="icon-info"></i>
+    </div>
+    
+    <span class="popupContent alert-message" id="popupContent">{{message}}</span>
+  
+</div>
+{% endfor %}
+
+{% endif %}
+    <div class="row mt-3">
+      <div class="col-lg-8 " style="margin: auto;">
+         <div class="card">
+           <div class="card-body">
+           <div class="card-title">Create Supplier |<a href="#view"> View Suppliers</a></div>
+           <hr>
+          <form class="horizontal-form" method="POST">
+           
+            {% csrf_token %}
+           
+
+           <div>
+            
+            <div class="form-group">
+             <label for="input-2">Name</label>
+             <input type="text" name="name" class="form-control" placeholder="Name" required>
+            </div>
+            <div class="form-group">
+                <label for="input-2">Email</label>
+                <input type="text" name="email" class="form-control" placeholder="Email" required>
+               </div>
+               <div class="form-group">
+                <label for="input-2">Phone Number</label>
+                <input type="tel" name="telephone" class="form-control" placeholder="Phone Number" required>
+               </div>
+               <div class="form-group">
+                <label for="input-2">Address</label>
+                <input type="address" name="address" class="form-control" placeholder="Phone Number" required>
+               </div>
+           </div>   
+           <div class="form-group">
+            <button type="submit" class="btn btn-light px-5"> Create Supplier</button>
+          </div>
+          </form>
+         </div>
+         </div>
+         <div class="col-lg- 9">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title" id="view">List Of Suppliers</h5>
+              
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Phone No.</th>
+                      <th scope="col">Actions</th>
+                      
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if suppliers %}
+                    
+                    {% for supplier in suppliers %}
+                    <tr>
+                      
+                        <td>{{supplier.name}}</td>
+                        <td>{{supplier.email}}</td>
+                        <td>{{supplier.phone_number}}</td>
+                        <td>{{supplier.address}}</td>
+                        <td ><a href="{% url "supplier-details" supplier.id %}"><button class="btn btn-primary viewBtn"  style="font-size:10px; background-color: #28a745; color:white;" data-item-id="{{supplier.id}}" type="button" >View</button></a><button id="updateBtn" class="btn btn-primary updateBtn" style="background-color: #fd7e14;font-size:10px; color:white;" type="button" data-toggle="modal"
+                           data-item-id="{{supplier.id}}">Update</button><button class="btn btn-primary modalBtn" style="background-color: red;font-size:10px; color:white;" type="button" data-toggle="modal"
+                           data-item-id="{{supplier.id}}">Delete</button></td></td>
+                      
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                      <td colspan="4"><p>No Suppliers</p><td>
+                    </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!--End Row-->
+      </div>
+
+
+      
+    </div><!--End Row-->
+    {% endblock content %}
+	
+
+</body>
+</html>

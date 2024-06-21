@@ -1,0 +1,98 @@
+{% extends "app/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+ 
+
+<body class="bg-theme bg-theme2">
+ 
+<!-- Start wrapper-->
+
+<div class="clearfix"></div>
+	
+  <div class="content-wrapper">
+    <div class="container-fluid">
+
+    {% block content %}
+  <!--Start Dashboard Content-->
+ 
+	<div class="card mt-3 ">
+    <div class="card-content">
+        <div class="row row-group m-0 d-flex flex-row justify-content-center align-items-center">
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+                <div class="card-body">
+                  <a href="{% url "create-inventory" %}"> <h5 class="text-white mb-0">View <span class="float-right"><i class="fa fa-shopping-cart"></i></span></h5>
+                    
+                  <h5 class="mb-0 text-white small-font">Inventory <span class="float-right"></span></h5>
+                </div></a>
+            </div>
+            
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+                <div class="card-body">
+                  <a href="{% url "create-supplier" %}"><h5 class="text-white mb-0">View <span class="float-right"><i class="fa fa-envira"></i></span></h5>
+                    
+                  <p class="mb-0 text-white small-font">Supplier<span class="float-right"></span></p>
+                </div></a>
+            </div>
+        </div>
+    </div>
+ </div>  
+	  
+
+	
+	<div class="row">
+	 <div class="col-12 col-lg-12">
+	   <div class="card">
+	     <div class="card-header">History
+		  
+	       <div class="table-responsive">
+                 <table class="table align-items-center table-flush table-borderless">
+                  <thead>
+                   <tr>
+                     <th>Item</th>
+                     <th>Price</th>
+                     <th>Date created</th>
+                     <th>Suppliers</th>
+                   </tr>
+                   </thead>
+                   <tbody>{% for item in items %}<tr>
+                    <td>{{item.name}}</td>
+                    <td>{{item.price}} {{parcel.recipient_lname}}</td>
+                    <td>{{item.date_created}}</td>
+                  
+                    <td>
+                      {% for item in item.suppliers.all %}
+                      {{item.name}},
+                      {% endfor %}
+                    </td>
+                    
+					
+                   </tr>
+                   {% endfor %}
+                  
+
+                 </tbody></table>
+               </div>
+	   </div>
+	 </div>
+	</div><!--End Row-->
+  {% endblock content %}
+      <!--End Dashboard Content-->
+	  
+	
+
+  <!-- Bootstrap core JavaScript-->
+  <script src="{% static "app/assets/js/jquery.min.js" %}"></script>
+  <script src="{% static "app/assets/js/popper.min.js" %}"></script>
+  <script src="{% static "app/assets/js/bootstrap.min.js" %}"></script>
+  <!-- sidebar-menu js -->
+  <script src="{% static "app/assets/js/sidebar-menu.js" %}"></script>
+  <!-- loader scripts -->
+  <script src="{% static "app/assets/js/jquery.loading-indicator.js" %}"></script>
+  <!-- Custom scripts -->
+  <script src="{% static "app/assets/js/app-script.js" %}"></script>
+
+
+  
+</body>
+</html>
