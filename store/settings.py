@@ -28,20 +28,23 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: don't run with debug turned on in production!
 SECRET_KEY =  env('SECRET_KEY')
+
+
 DEBUG = env('DEBUG')
-
-
-ALLOWED_HOSTS = []
-
 SECURE_HSTS_SECONDS = 31536000  # 1 year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
-# Other security settings
+# Other security settings 
 SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-# Application definition
+
+
+ALLOWED_HOSTS = []
+
+CSRF_TRUSTED_ORIGINS = []
+# # Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
