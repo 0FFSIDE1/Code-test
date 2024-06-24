@@ -194,18 +194,17 @@ class ItemDetailView(APIView):
 class SupplierView(APIView):
     """To view all suppliers and there products"""
     def get(self, request):
-        items = Supplier.objects.all() #This gets all the supplier record in the data base
-
+        items = Supplier.objects.all() #This gets all the supplier record in the database
         serializer = SupplierSerializer(items, many=True)
         return Response(serializer.data)
     def delete(self, request, pk):
-        """To delete specific items using a name of the item"""
+        """To delete specific supplier using pk of the supplier"""
         item = get_object_or_404(Supplier, pk=pk)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def put(self, request, pk):
-        """To Update entire details of a specific items using pk of the item"""
+        """To Update entire details of a specific supplier using pk of the supplier"""
         item = get_object_or_404(Supplier, pk=pk)
         serializer = SupplierSerializer(item, data=request.data)
         if serializer.is_valid():
@@ -214,7 +213,7 @@ class SupplierView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def patch(self, request, pk):
-        """To Update specific field of a product using a pk of the item to get the item"""
+        """To Update specific field of a supplier using a pk of the supplier"""
         item = get_object_or_404(Supplier, pk=pk) 
         serializer = SupplierSerializer(item, data=request.data, partial=True)
         if serializer.is_valid():
@@ -230,7 +229,7 @@ class SupplierDetailView(APIView):
         return Response(serializer.data)
     def delete(self, request, pk):
         """To delete specific supplier using a pk of the supplier"""
-        item = get_object_or_404(Inventory, pk=pk)
+        item = get_object_or_404(Supplier, pk=pk)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
