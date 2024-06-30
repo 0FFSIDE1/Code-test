@@ -95,4 +95,3 @@
 # JSON Response: For returning JSON responses in function-based views.
 # Messages: For displaying success messages to users after operations like create, update, and delete.
 
-# This documentation provides a comprehensive overview of the views and functionality implemented in the inventory management application. Each section explains the purpose and functionality of the views and how they interact with models and templates.
