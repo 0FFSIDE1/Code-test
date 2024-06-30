@@ -29,50 +29,6 @@ class Detailview(DetailView):
         finally:
             return Inventory.objects.filter(pk=self.kwargs['pk'])
 
-
-def CreateSupplier(request):
-    "This handles form submission for creating a supplier"
-    if request.method == 'POST':
-        supplier = Supplier.objects.create(
-            name= request.POST['name'],
-            email= request.POST['email'],
-            phone_number= request.POST['telephone'],
-            address= request.POST['address'],
-        ) 
-        # Get the data and save it create a new supplier in the database
-        supplier.save()
-        messages.success(request, 'Supplier created Successfully!') 
-        return redirect('create-supplier')
-    else:
-        context = {
-            'suppliers': Supplier.objects.all(),
-        }
-        return render(request, 'app/supplier.html', context)
-
-def CreateInventory(request):
-    """This creates an item in the Inventory if POST request is sent, else displays list of items in database and their suppliers"""
-    if request.method == 'POST':
-        item = Inventory.objects.create(
-            name = request.POST['name'],
-            price = request.POST['price'],
-            date_created = request.POST['date'],
-            description =request.POST['description'],
-        )
-        supplier = request.POST.getlist('supplier')
-        item.suppliers.set(supplier)
-        item.save()
-        messages.success(request, 'Label created Successfully!')
-        return redirect('create-inventory')
-    
-    else:
-        context = {
-        'suppliers': Supplier.objects.all(),
-        'items': Inventory.objects.all(),
-        
-        }
-        return render(request, 'app/inventory.html', context=context)
-
-
 class SupplerDetail(DetailView):
     """This displays specific supplier in the Inventory, list of items supplier has in database"""
     queryset = Supplier
@@ -180,49 +136,6 @@ def updateItem(request):
         return redirect('create-inventory')
     return render(request, 'app/inventory.html')
 
-def CreateSupplier(request):
-    "This handles form submission for creating a supplier"
-    if request.method == 'POST':
-        supplier = Supplier.objects.create(
-            name= request.POST['name'],
-            email= request.POST['email'],
-            phone_number= request.POST['telephone'],
-            address= request.POST['address'],
-        ) 
-        # Get the date and save it create a new supplier in the database
-        supplier.save()
-        messages.success(request, 'Supplier created Successfully!') 
-        return redirect('create-supplier')
-    else:
-        context = {
-            'suppliers': Supplier.objects.all(),
-        }
-        return render(request, 'app/supplier.html', context)
-    
-def CreateInventory(request):
-    """This creates an item in the Inventory if POST request is sent, else displays list of items in database and their suppliers"""
-    if request.method == 'POST':
-        item = Inventory.objects.create(
-            name = request.POST['name'],
-            price = request.POST['price'],
-            date_created = request.POST['date'],
-            description =request.POST['description'],
-        )
-        supplier = request.POST.getlist('supplier')
-        item.suppliers.set(supplier)
-        item.save()
-        messages.success(request, 'Label created Successfully!')
-        return redirect('create-inventory')
-    
-    else:
-        context = {
-        'suppliers': Supplier.objects.all(),
-        'items': Inventory.objects.all(),
-        
-        }
-        return render(request, 'app/inventory.html', context=context)
-
-#
 #  Api Views 
 #  This view controls all the API calls, icludes view to view all items, to view specific items, to, DELETE,POST,GET,PUT,PATCH, also View all supplier and a specific supplier and their products
 
@@ -241,7 +154,7 @@ class AllItemDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def post(self, request):
-        """To Update entire details of a specific items using name of the item"""
+        """To Update entire details of a specific item"""
         serializer = InventorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -315,15 +228,6 @@ class SupplierView(APIView):
         item = get_object_or_404(Supplier, pk=pk)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    def put(self, request, pk):
-        """To Update entire details of a specific items using name of the item"""
-        item = get_object_or_404(Supplier, pk=pk)
-        serializer = SupplierSerializer(item, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def patch(self, request, pk):
         """To Update specific field of a product using a name of the item to get the item"""
