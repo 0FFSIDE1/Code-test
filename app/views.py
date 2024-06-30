@@ -29,21 +29,6 @@ class Detailview(DetailView):
         finally:
             return Inventory.objects.filter(pk=self.kwargs['pk'])
 
-class SupplerDetail(DetailView):
-    """This displays specific supplier in the Inventory, list of items supplier has in database"""
-    queryset = Supplier
-    template_name = 'app/supplier_detail.html'
-    context_object_name = 'supplier'
-    slug_field = 'pk'
-    slug_url_kwarg = 'pk'
-    def get_queryset(self):
-        try:
-            Supplier.objects.filter(pk=self.kwargs['pk'])
-        except Supplier.MultipleObjectsReturned:
-            return Supplier.objects.filter(pk=self.kwargs['pk'])
-        finally:
-            return Supplier.objects.filter(pk=self.kwargs['pk'])
-
 def CreateSupplier(request):
     "This handles form submission for creating a supplier"
     if request.method == 'POST':
@@ -62,6 +47,21 @@ def CreateSupplier(request):
             'suppliers': Supplier.objects.all(),
         }
         return render(request, 'app/supplier.html', context)
+
+class SupplerDetail(DetailView):
+    """This displays specific supplier in the Inventory, list of items supplier has in database"""
+    queryset = Supplier
+    template_name = 'app/supplier_detail.html'
+    context_object_name = 'supplier'
+    slug_field = 'pk'
+    slug_url_kwarg = 'pk'
+    def get_queryset(self):
+        try:
+            Supplier.objects.filter(pk=self.kwargs['pk'])
+        except Supplier.MultipleObjectsReturned:
+            return Supplier.objects.filter(pk=self.kwargs['pk'])
+        finally:
+            return Supplier.objects.filter(pk=self.kwargs['pk'])
     
 def DeleteSupplier(request, pk):
     """This function deletes a Supplier from the Supplier database"""
@@ -143,12 +143,11 @@ class AllItemDetailView(APIView):
     """To view all Products in the database"""
     def get(self, request):
         items = Inventory.objects.all() # This gets all the record of items in the database
-
         serializer = InventorySerializer(items, many=True)
         return Response(serializer.data)
         
     def post(self, request):
-        """To Update entire details of a specific item"""
+        """To Add item"""
         serializer = InventorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -168,13 +167,13 @@ class ItemDetailView(APIView):
             return Response(serializer.data)
         
     def delete(self, request, pk):
-        """To delete specific items using a name of the item"""
+        """To delete specific items"""
         item = get_object_or_404(Inventory, pk=pk)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     def put(self, request, pk):
-        """To Update entire details of a specific items using name of the item"""
+        """To Update entire details of a specific product"""
         item = get_object_or_404(Inventory, pk=pk)
         serializer = InventorySerializer(item, data=request.data)
         if serializer.is_valid():
@@ -183,7 +182,7 @@ class ItemDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def patch(self, request, pk):
-        """To Update specific field of a product using a name of the item to get the item"""
+        """To Update specific field of a product"""
         item = get_object_or_404(Inventory, pk=pk) 
         serializer = InventorySerializer(item, data=request.data, partial=True)
         if serializer.is_valid():
@@ -216,8 +215,8 @@ class SupplierDetailView(APIView):
         return Response(serializer.data)
    
     def delete(self, request, pk):
-        """To delete specific supplier using a pk of the supplier"""
-        item = get_object_or_404(Inventory, pk=pk)
+        """To delete specific supplier"""
+        item = get_object_or_404(Supplier, pk=pk)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
