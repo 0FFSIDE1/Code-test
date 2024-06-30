@@ -218,18 +218,15 @@
               if (!response.ok){
                 throw new Error("Network response was not ok!");
               }
-              console.log('response is ok');
               $('#exampleModal').modal('show')
               return response.json()
             .then(data =>{
-              
               var id = document.getElementById('myId')
               var name = document.getElementById('name')
               var price = document.getElementById('price')
               var description = document.getElementById('description')
               var date_created = document.getElementById('date_created')
               var supplier = document.getElementById('Select01')
-              var update = document.getElementById('update')
               // set the value
               id.value = `${data.id}`
               name.value = `${data.name}`
@@ -237,7 +234,7 @@
               description.value = `${data.description}`
               date_created.value = `${data.date_created}`
               supplier.value = `${data.supplier}`
-              update.value = `${data.name}`
+              
             })
             })
             .catch(error => {
@@ -265,7 +262,6 @@
               var name = document.getElementById('name')
               var modile_no = document.getElementById('modile_no')
               var address = document.getElementById('address')
-              
               //var update = document.getElementById('update')
               // set the value
               id.value = `${data.id}`
