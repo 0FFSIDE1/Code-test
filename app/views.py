@@ -155,16 +155,6 @@ class AllItemDetailView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def patch(self, request, pk):
-        """To Update specific field of a product using a name of the item to get the item"""
-        item = get_object_or_404(Inventory, pk=pk) 
-        serializer = InventorySerializer(item, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
     
 class ItemDetailView(APIView):
     def get(self, request, pk):
