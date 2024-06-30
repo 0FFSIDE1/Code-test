@@ -147,12 +147,6 @@ class AllItemDetailView(APIView):
         serializer = InventorySerializer(items, many=True)
         return Response(serializer.data)
         
-    def delete(self, request, pk):
-        """To delete specific items using a name of the item"""
-        item = get_object_or_404(Inventory, pk=pk)
-        item.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
     def post(self, request):
         """To Update entire details of a specific item"""
         serializer = InventorySerializer(data=request.data)
@@ -222,21 +216,7 @@ class SupplierView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self, request, pk):
-        """To delete specific items using a name of the item"""
-        item = get_object_or_404(Supplier, pk=pk)
-        item.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    def patch(self, request, pk):
-        """To Update specific field of a product using a name of the item to get the item"""
-        item = get_object_or_404(Supplier, pk=pk) 
-        serializer = SupplierSerializer(item, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SupplierDetailView(APIView):
     """To view a specific supplier and product supplied"""
